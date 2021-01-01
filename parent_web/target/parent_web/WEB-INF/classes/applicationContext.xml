@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 配置 spring 创建容器时要扫描的包 -->
+    <context:component-scan base-package="cn.itcast.service" />
+    <context:component-scan base-package="cn.itcast.dao" />
+
+<!--    <context:property-placeholder location="classpath:jdbcConfig.properties"></context:property-placeholder>-->
+    <!--  整合Mybatis  -->
+    <!--  1.配置连接池  -->
+
+<!--    数据库连接  -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://hadoop2:3306/csc?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true" />
+        <property name="user" value="slave" />
+        <property name="password" value="yuliang123" />
+    </bean>
+
+
+    <!--        支持读写分离 todo-->
+<!--    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
+<!--        init-method="init" destroy-method="close">-->
+        <!--        支持读写分离 -->
+<!--        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+<!--        <property name="url" value="jdbc:mysql://192.168.207.131:4040/csc?characterEncoding=UTF-8"/>-->
+<!--        <property name="username" value="root"/>-->
+<!--        <property name="password" value="yuliang123"/>-->
+<!--        <property name="maxActive" value="10"/>-->
+<!--        <property name="minIdle" value="5"/>-->
+<!--    </bean>-->
+
+    <!--  2.把IOC管理交给SqlSessionFactory
+            配置SqlSessionFactory工厂, 可以通过连接池构建Factory工厂  -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 传入PageHelper的插件 -->
+        <property name="plugins">
+            <array>
+                <!-- 传入插件的对象 -->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <props>
+                            <prop key="helperDialect">mysql</prop> <!-- mysql or oracle -->
+                            <prop key="reasonable">true</prop>
+                        </props>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--  扫描dao接口  -->
+    <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.itcast.dao"></property>
+    </bean>
+
+    <!-- 配置声明式事务   -->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 配置事务的通知-->
+    <tx:advice id="txAdvice" transaction-manager="dataSourceTransactionManager">
+        <tx:attributes>
+<!--            <tx:method name="*" propagation="REQUIRED" read-only="false"></tx:method>-->
+            <!--     写       -->
+            <tx:method name="add*" propagation="REQUIRED" read-only="false"></tx:method>
+            <tx:method name="insert*" propagation="REQUIRED" read-only="false"></tx:method>
+            <tx:method name="edit*" propagation="REQUIRED" read-only="false"></tx:method>
+            <tx:method name="delete*" propagation="REQUIRED" read-only="false"></tx:method>
+            <tx:method name="set*" propagation="REQUIRED" read-only="false"></tx:method>
+            <tx:method name="remove*" propagation="REQUIRED" read-only="false"></tx:method>
+
+            <!--      读      -->
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"></tx:method>
+            <tx:method name="get*"  read-only="true"></tx:method>
+            <tx:method name="search*"  read-only="true"></tx:method>
+            <tx:method name="select*"  read-only="true"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置aop-->
+    <aop:config>
+        <!-- 配置切入点表达式-->
+        <!--        <aop:pointcut id="pt1" expression="execution(* cn.itcast.service.impl.*ServiceImpl.*(..))"></aop:pointcut>-->
+        <!--建立切入点表达式和事务通知的对应关系 -->
+        <!--        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>-->
+
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* cn.itcast.service.impl.*ServiceImpl.*(..))"></aop:advisor>
+    </aop:config>
+
+
+    <!--  todo:测试删除  -->
+        <bean id="roleService" class="cn.itcast.service.impl.RoleServiceImpl"></bean>
+<!--    <bean id="instanceFactory" class="cn.itcast.factory.InstanceFactory"></bean>-->
+<!--    <bean id="roleService" factory-bean="instanceFactory" factory-method="getRoleService"></bean>-->
+
+<!--    <bean id="roleService" class="cn.itcast.factory.StaticFactory" factory-method="getRoleService" scope="singleton"></bean>-->
+</beans>

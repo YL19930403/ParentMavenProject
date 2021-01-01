@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 开启注解扫描 , 只扫描Controller注解-->
+    <context:component-scan base-package="cn.itcast.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+
+<!--  InternalResourceViewResolver 与  SimpleControllerHandlerAdapter 都是视图解析器 -->
+    <!-- 视图解析器对象 -->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--配置渲染器-->
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        <!--结果视图的前缀-->
+        <property name="prefix" value="/pages/"></property>
+        <!--结果视图的后缀-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--  配置前端控制器，对静态资源不拦截  -->
+    <mvc:resources mapping="/css/**" location="/css/**"></mvc:resources>
+    <mvc:resources mapping="/images/" location="/img/**/"></mvc:resources>
+    <mvc:resources mapping="/js/" location="/js/**"></mvc:resources>
+
+
+    <!-- 开启SpringMVC框架注解的支持 -->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+    <!--  配置拦截器  -->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+
+            <!-- 要拦截的具体方法   -->
+            <!--            <mvc:mapping path="/**/"></mvc:mapping>   拦截所有的方法-->
+<!--            <mvc:mapping path="/role/*"></mvc:mapping>-->
+            <!-- 不要拦截的方法   -->
+            <!--            <mvc:exclude-mapping path=""></mvc:exclude-mapping>-->
+
+
+
+            <!-- 配置拦截器对象   -->
+<!--            <bean class="cn.itcast.interceptor.MyInterceptor"></bean>-->
+
+<!--        </mvc:interceptor>-->
+
+<!--    </mvc:interceptors>-->
+
+
+    <!--  配置异常处理器  -->
+    <bean id="sysExceptionResolver" class="cn.itcast.exception.SysExceptionResolver"></bean>
+
+    <!-- 注册自定义类型转换器 -->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="cn.itcast.utils.StringToDateConverter"></bean>
+            </set>
+        </property>
+    </bean>
+</beans>
