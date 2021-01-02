@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "findAll.do")
+    @RequestMapping(value = "/findAll.do")
     public ModelAndView findAll() throws Exception {
         ModelAndView mv = new ModelAndView();
         List<UserInfo> userList = userService.findAll();
@@ -27,7 +27,7 @@ public class UserController {
         return mv;
     }
 
-    @RequestMapping(value = "save.do")
+    @RequestMapping(value = "/save.do")
     public String save(UserInfo user) throws Exception
     {
         Integer result = userService.save(user);
@@ -37,7 +37,7 @@ public class UserController {
         return "error";
     }
 
-    @RequestMapping(value = "findUserInfoById.do")
+    @RequestMapping(value = "/findUserInfoById.do")
     public ModelAndView findUserInfoById(@RequestParam(name = "id", required = true) Integer id) throws Exception{
         ModelAndView mv = new ModelAndView();
         UserInfo userInfo = userService.findUserInfoById(id);
