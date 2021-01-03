@@ -26,4 +26,9 @@ public class PermissionServiceImpl implements IPermissionService {
     public void save(Permission permission) throws Exception {
         permissionDao.save(permission);
     }
+
+    @Override
+    public void deletePermission(Integer id) throws Exception {
+        permissionDao.deletePermission(id);
+    }
 }

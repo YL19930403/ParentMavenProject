@@ -19,4 +19,6 @@ public interface IUserService extends UserDetailsService {
 
     public abstract List<RoleInfo> findOtherRoles(Integer id) throws Exception;
 
+    public abstract void addRoleToUser(Integer user_id, Integer[] ids) throws Exception;
+
 }

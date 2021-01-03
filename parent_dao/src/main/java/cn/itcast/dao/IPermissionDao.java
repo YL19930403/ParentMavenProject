@@ -1,6 +1,7 @@
 package cn.itcast.dao;
 
 import itcast.domain.Permission;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
@@ -18,4 +19,7 @@ public interface IPermissionDao {
 
     @Insert("INSERT INTO `permission`(permission_name, url) VALUES(#{permission_name}, #{url})")
     public abstract void save(Permission permission) throws Exception;
+
+    @Delete("DELETE FROM `permission` WHERE id = #{id}")
+    public abstract void deletePermission(Integer id) throws Exception;
 }

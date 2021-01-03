@@ -10,4 +10,6 @@ public interface IPermissionService {
     public abstract List<Permission> findAll() throws Exception;
 
     public abstract void save(Permission permission) throws Exception;
+
+    public abstract void deletePermission(Integer id) throws Exception;
 }

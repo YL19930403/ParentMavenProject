@@ -5,6 +5,7 @@ import cn.itcast.service.impl.UserServiceImpl;
 import itcast.domain.RoleInfo;
 import itcast.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+@Controller
 @RequestMapping(path = "/user")
 public class UserController {
 
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     ///查询用户以及用户可以添加的角色
-    @RequestMapping(value = "/findUserByIdAndAllRole")
+    @RequestMapping(value = "/findUserByIdAndAllRole.do")
     public ModelAndView findUserByIdAndAllRole(@RequestParam(name = "user_id", required = true) Integer user_id) throws Exception{
         ModelAndView mv = new ModelAndView();
         UserInfo userInfo = userService.findUserInfoById(user_id);
@@ -65,4 +67,20 @@ public class UserController {
         return mv;
     }
 
+    // 查询用户详情
+    @RequestMapping(value = "/findById.do")
+    public ModelAndView findById(@RequestParam(name = "id", required = true) Integer id) throws Exception{
+        ModelAndView mv = new ModelAndView();
+        UserInfo userInfo = userService.findUserInfoById(id);
+        mv.addObject("user", userInfo);
+        mv.setViewName("user-show");
+        return mv;
+    }
+
+    @RequestMapping(value = "/addRoleToUser.do")
+    public String addRoleToUser(@RequestParam(name = "user_id", required = true) Integer user_id,
+                                      @RequestParam(name = "ids", required = true) Integer[] ids) throws Exception{
+        userService.addRoleToUser(user_id, ids);
+        return "redirect:findAll.do";
+    }
 }

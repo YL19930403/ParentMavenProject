@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -101,16 +102,14 @@
 
 						<div class="col-md-2 title">角色名称</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="role_name"
+							<input type="text" class="form-control" name="roleName"
 								placeholder="角色名称" value="">
 						</div>
 						<div class="col-md-2 title">角色描述</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="role_desc"
+							<input type="text" class="form-control" name="roleDesc"
 								placeholder="角色描述" value="">
 						</div>
-										
-
 					</div>
 				</div>
 				<!--订单信息/--> <!--工具栏-->

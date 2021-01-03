@@ -31,6 +31,10 @@ public interface IRoleDao {
     public abstract List<RoleInfo> findListByUserId(Integer userId) throws Exception;
 
     @Insert("INSERT INTO `role`(role_name, role_desc)  VALUES(#{roleName}, #{roleDesc})")
+    @Results({
+            @Result(column = "role_name", property = "roleName", jdbcType = JdbcType.VARCHAR, javaType = String.class),
+            @Result(column = "role_desc", property = "roleDesc", jdbcType = JdbcType.VARCHAR, javaType = String.class),
+    })
     public abstract void save(RoleInfo roleInfo) throws Exception;
 
     @Select("SELECT * FROM `role` WHERE id = #{id}")

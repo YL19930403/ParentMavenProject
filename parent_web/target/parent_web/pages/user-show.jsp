@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@page isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -139,11 +140,11 @@
                                 </tr>
                                 </thead>
                                 <tr data-tt-id="0">
-                                    <td colspan="2">${user.username}</td>
+                                    <td colspan="2">${user.user_name}</td>
                                 </tr>
 
                                 <tbody>
-                                <c:forEach items="${user.roles}" var="role" varStatus="vs1">
+                                <c:forEach items="${user.roleInfos}" var="role" varStatus="vs1">
                                     <tr data-tt-id="${vs1.index+1}" data-tt-parent-id="0"">
                                         <td>${role.roleName }</td>
                                         <td>${role.roleDesc }</td>
