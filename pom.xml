@@ -213,6 +213,20 @@
 <!--            <version>3.0</version>-->
 <!--        </dependency>-->
 
+        <!--   权限控制 - start     -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>5.0.1.RELEASE</version>
+        </dependency>
+        <!--    权限控制 - end    -->
+
         <!-- log start -->
         <dependency>
             <groupId>log4j</groupId>

@@ -5,12 +5,14 @@ import cn.itcast.service.impl.UserServiceImpl;
 import itcast.domain.RoleInfo;
 import itcast.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @Controller
@@ -21,6 +23,8 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping(value = "/findAll.do")
+    @RolesAllowed("ROLE_ADMIN")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView findAll() throws Exception {
         ModelAndView mv = new ModelAndView();
         List<UserInfo> userList = userService.findAll();
@@ -30,6 +34,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/save.do")
+    @PreAuthorize("authentication.principal.username == 'wudy'")
     public String save(UserInfo user) throws Exception
     {
         Integer result = userService.save(user);

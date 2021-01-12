@@ -4,6 +4,7 @@ import cn.itcast.service.IOrderService;
 import com.github.pagehelper.PageInfo;
 import itcast.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class OrderController {
     IOrderService iOrderService;
 
     @RequestMapping(value = "/findAll.do")
+    @Secured({"ROLE_ADMIN"})
     public ModelAndView findAll(@RequestParam(name = "page" , required = true, defaultValue = "1") int page,
                                 @RequestParam(name = "size", required = true, defaultValue = "5") int size) throws Exception{
         ModelAndView modelAndView = new ModelAndView();
